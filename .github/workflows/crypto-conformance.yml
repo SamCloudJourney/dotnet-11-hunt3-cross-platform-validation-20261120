@@ -1,0 +1,23 @@
+name: Composite signature conformance
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'crypto-conformance/**'
+      - '.github/workflows/crypto-conformance.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.100
+      - name: Verify generated signatures reject one-factor changes
+        run: dotnet run --project crypto-conformance/Cr01.csproj --configuration Release
