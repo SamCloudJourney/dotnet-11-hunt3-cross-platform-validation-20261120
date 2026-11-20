@@ -1,0 +1,21 @@
+name: Windows directory name control
+on:
+  push:
+    branches:
+      - hunter-fbdb9e19-za01-path
+    paths:
+      - 'path-control/**'
+      - '.github/workflows/hunter-fbdb9e19-path-control.yml'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.100
+      - name: Check owned temporary directory semantics
+        run: dotnet run --project path-control/PathControl.csproj --configuration Release
