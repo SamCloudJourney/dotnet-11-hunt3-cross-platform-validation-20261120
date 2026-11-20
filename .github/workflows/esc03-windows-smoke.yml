@@ -1,0 +1,11 @@
+name: esc03 Windows startup
+on:
+  push:
+    branches: [ck02-esc03-smoke-20261120]
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - name: Confirm runner start
+        shell: pwsh
+        run: Write-Output 'esc03 runner started'
