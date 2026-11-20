@@ -1,0 +1,26 @@
+name: Inert NuGet cache atomicity check
+on:
+  push:
+    paths:
+      - .github/workflows/cache-atomicity.yml
+      - scripts/cache_atomicity.py
+  workflow_dispatch:
+jobs:
+  cache-state:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.100
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check isolated cache state
+        run: python scripts/cache_atomicity.py
