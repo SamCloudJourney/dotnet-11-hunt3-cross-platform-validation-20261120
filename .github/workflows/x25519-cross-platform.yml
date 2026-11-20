@@ -1,0 +1,30 @@
+name: Inert X25519 release validation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/x25519-cross-platform.yml'
+      - 'xk01/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  x25519:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '11.0.x'
+      - name: Record installed version
+        run: |
+          dotnet --version
+          dotnet --list-runtimes
+      - name: Run inert low-order peer controls
+        run: dotnet run --project xk01/Xk01.csproj -c Release
