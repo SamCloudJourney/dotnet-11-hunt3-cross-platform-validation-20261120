@@ -1,0 +1,24 @@
+name: Inert composite signature support check
+on:
+  push:
+    paths:
+      - .github/workflows/crypto-support.yml
+      - crypto-support/Cr01.csproj
+      - crypto-support/Program.cs
+  workflow_dispatch:
+jobs:
+  support:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.100
+      - name: Query release support
+        run: dotnet run --project crypto-support/Cr01.csproj --nologo
