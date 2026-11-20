@@ -1,0 +1,12 @@
+name: ESC05 runner availability check
+on:
+  push:
+    branches:
+      - esc05-cp01-runner-check-01a1fae0
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - name: Confirm job startup
+        shell: pwsh
+        run: Write-Output "ESC05_RUNNER_OK"
